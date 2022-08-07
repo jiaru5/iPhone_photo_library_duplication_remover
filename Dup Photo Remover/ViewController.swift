@@ -12,6 +12,7 @@ import CommonCrypto
 
 class ViewController: UIViewController {
     
+    @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var infoLabel: UILabel!
     
     var fetchResult: PHFetchResult<PHAsset>!
@@ -25,6 +26,8 @@ class ViewController: UIViewController {
     }
     
     @IBAction func didPressButtonStart(_ sender: Any) {
+        startButton.isEnabled = false
+        uniqueSet.removeAll()
         fetchAllPhotos()
     }
     
@@ -99,6 +102,10 @@ class ViewController: UIViewController {
         PHPhotoLibrary.shared().performChanges({
             PHAssetChangeRequest.deleteAssets(self.duplicatedItems as NSArray)
         })
+        
+        DispatchQueue.main.async {
+            self.startButton.isEnabled = true
+        }
     }
 
 }

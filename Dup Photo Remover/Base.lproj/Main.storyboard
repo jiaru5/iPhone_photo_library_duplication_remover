@@ -38,6 +38,7 @@
                     </view>
                     <connections>
                         <outlet property="infoLabel" destination="mOC-gr-Fdm" id="RdN-u1-FIM"/>
+                        <outlet property="startButton" destination="7yh-hS-BCL" id="YQG-PH-4qN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
