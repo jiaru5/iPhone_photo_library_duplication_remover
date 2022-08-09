@@ -75,7 +75,9 @@ class ViewController: UIViewController {
     }
     
     func findDuplicatedAssets() {
+        let workGroup = DispatchGroup()
         fetchResult.enumerateObjects { asset, index, stop in
+            workGroup.enter()
             autoreleasepool(invoking: {
                 print("photo: \(asset.localIdentifier)")
                 let options = PHContentEditingInputRequestOptions()
@@ -94,18 +96,23 @@ class ViewController: UIViewController {
                             self.uniqueSet.insert(md5)
                         }
                     }
+                    
+                    workGroup.leave()
                 })
             })
         }
         
-        // 删除找到的重复项目
-        PHPhotoLibrary.shared().performChanges({
-            PHAssetChangeRequest.deleteAssets(self.duplicatedItems as NSArray)
+        workGroup.notify(queue: DispatchQueue.global(qos: .default), execute: {
+            // 删除找到的重复项目
+            print("Delete Items")
+            PHPhotoLibrary.shared().performChanges({
+                PHAssetChangeRequest.deleteAssets(self.duplicatedItems as NSArray)
+            })
+            
+            DispatchQueue.main.async {
+                self.startButton.isEnabled = true
+            }
         })
-        
-        DispatchQueue.main.async {
-            self.startButton.isEnabled = true
-        }
     }
 
 }
